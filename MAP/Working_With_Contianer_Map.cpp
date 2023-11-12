@@ -7,8 +7,6 @@ using std::cin;
 using std::cout;
 using std::endl;
 
-//#define RANGE_BASED_FOR_ARRAY
-//#define STL_MAP
 
 /*
 Implement a traffic police database on fine tickets using a 
@@ -27,38 +25,42 @@ Save and load information from a file
 
 
 // Structure for presenting offenses
-struct Violation {
+struct Violation
+{
     std::string description;
     int fineAmount;
 };
 
 // definition for the traffic database police(GAI)
-using GaiDatabase = std::map<std::string, std::vector<Violation>>;
+using _GAIDatabase = std::map<std::string, std::vector<Violation>>;
 
-// Function for adding an offense to the database
-void AddViolation(GaiDatabase& database, const std::string& carNumber, const Violation& violation) 
+// Function for adding an voliation to the database
+void AddViolation(_GAIDatabase& database, const std::string& carNumber, const Violation& violation)
 {
-    database[carNumber].push_back(violation);
+        database[carNumber].push_back(violation);
 }
 
 // Function for complete database listing
-void PrintDatabase(const GaiDatabase& database) 
+void PrintDatabase(const _GAIDatabase& database)
 {
-    for (const auto& entry : database) {
+    for (const auto& entry : database) 
+    {
         std::cout << "Car Number: " << entry.first << std::endl;
-        for (const auto& violation : entry.second) {
+        for (const auto& violation : entry.second) 
+        {
             std::cout << "  Violation: " << violation.description << ", Fine Amount: " << violation.fineAmount << std::endl;
         }
     }
 }
 
-// Function for printing data by given number
-void PrintDataForCar(const GaiDatabase& database, const std::string& carNumber) 
+// Function for printing data by indicated car given number
+void PrintDataForCar(const _GAIDatabase& database, const std::string& carNumber)
 {
     auto it = database.find(carNumber);
     if (it != database.end()) {
         std::cout << "Car Number: " << it->first << std::endl;
-        for (const auto& violation : it->second) {
+        for (const auto& violation : it->second) 
+        {
             std::cout << "  Violation: " << violation.description << ", Fine Amount: " << violation.fineAmount << std::endl;
         }
     }
@@ -68,12 +70,14 @@ void PrintDataForCar(const GaiDatabase& database, const std::string& carNumber)
 }
 
 // Function for saving the database to a file
-void SaveDatabaseToFile(const GaiDatabase& database, const std::string& filename)
+void FileSave_To_DataBase(const _GAIDatabase& database, const std::string& filename)
 {
     std::ofstream outFile(filename);
-    for (const auto& entry : database) {
+    for (const auto& entry : database) 
+    {
         outFile << entry.first << " " << entry.second.size() << " ";
-        for (const auto& violation : entry.second) {
+        for (const auto& violation : entry.second) 
+        {
             outFile << violation.description << " " << violation.fineAmount << " ";
         }
         outFile << std::endl;
@@ -82,15 +86,17 @@ void SaveDatabaseToFile(const GaiDatabase& database, const std::string& filename
 }
 
 // Function to load a database from a file
-GaiDatabase LoadDatabaseFromFile(const std::string& filename) 
+_GAIDatabase LoadDatabaseFromFile(const std::string& filename)
 {
-    GaiDatabase database;
+    _GAIDatabase database;
     std::ifstream inFile(filename);
     std::string carNumber;
-    while (inFile >> carNumber) {
-        int numViolations;
+    while (inFile >> carNumber) 
+    {
+        int numViolations; //increment on number of voliation
         inFile >> numViolations;
-        for (int i = 0; i < numViolations; ++i) {
+        for (int i = 0; i < numViolations; ++i)
+        {
             Violation violation;
             inFile >> violation.description >> violation.fineAmount;
             database[carNumber].push_back(violation);
@@ -100,6 +106,11 @@ GaiDatabase LoadDatabaseFromFile(const std::string& filename)
     return database;
 }
 
+
+//#define RANGE_BASED_FOR_ARRAY
+//#define STL_MAP
+
+#define POLICE_TRAFFIC_OFFENSE
 
 void main()
 {
@@ -143,8 +154,10 @@ void main()
 #endif // STL_MAP
 
 
-    GaiDatabase database;
-    // // Adding records to the database
+#ifdef POLICE_TRAFFIC_OFFENSE
+
+    _GAIDatabase database;
+    //  Adding records to the database
     AddViolation(database, "M666KH", { "Speeding", 100 });
     AddViolation(database, "P538AB", { "Parking Violation", 50 });
     AddViolation(database, "H991EM", { "Running Red Light", 200 });
@@ -159,14 +172,16 @@ void main()
     PrintDataForCar(database, "DEF456");
 
     // Saving a database to a file
-    SaveDatabaseToFile(database, "database.txt");
+    FileSave_To_DataBase(database, "database.txt");
 
     // Loading a database from a file
-    GaiDatabase loadedDatabase = LoadDatabaseFromFile("database.txt");
+    _GAIDatabase loadedDatabase = LoadDatabaseFromFile("database.txt");
 
     // Data output after loading
     std::cout << "\nDatabase Contents After Loading:" << std::endl;
     PrintDatabase(loadedDatabase);
+
+#endif // POLICE_TRAFFIC_OFFENSE
 
 
 	
